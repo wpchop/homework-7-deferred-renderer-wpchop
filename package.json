@@ -20,6 +20,6 @@
     "gl-matrix": "^2.4.0",
     "gl-skybox": "^1.0.1",
     "stats-js": "^1.0.0-alpha1",
-    "webgl-obj-loader": "^1.0.0"
+    "webgl-obj-loader": "^1.1.3"
   }
 }

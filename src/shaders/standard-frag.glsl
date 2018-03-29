@@ -38,16 +38,6 @@ void main() {
         brightColor = vec4(0.0, 0.0, 0.0, 1.0); 
     }
 
-    float sx = fs_Pos.x * 2.0 - 1.0;
-	float sy = 1.0 - fs_Pos.y * 2.0;
-
-    if (fs_Pos.z > 0.0) {
-		col = vec3(0.0,187.0/255.0,1.0);
-		if (sy > 0.25 * sin(sx * 10.0) + 0.25) {
-			col = vec3(39.0/255.0, 112.0/255.0, 68.0/255.0);
-		}
-	}
-
     // if using textures, inverse gamma correct
     col = pow(col, vec3(2.2));
 
