@@ -104,12 +104,14 @@ void main() {
 	float lightIntensity = diffuseTerm + ambientTerm;
 
 	// Compute final shaded color
-	out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+	// out_Col = vec4(diffuseColor.rgb * lightIntensity, diffuseColor.a);
+	out_Col = vec4(diffuseColor.rgb * lightIntensity, t);
+	
 
 	if (t > 0.0) {
-		out_Col = vec4(pow(vec3(0.0,187.0/255.0,1.0), vec3(2.2)),1.0);
+		out_Col = vec4(pow(vec3(0.0,187.0/255.0,1.0), vec3(2.2)),t);
 		if (sy > 0.25 * sin(sx * 10.0) + 0.25) {
-			out_Col = vec4(pow(vec3(39.0/255.0, 112.0/255.0, 68.0/255.0), vec3(2.2)), 1.0);			
+			out_Col = vec4(pow(vec3(39.0/255.0, 112.0/255.0, 68.0/255.0), vec3(2.2)), t);			
 		}
 	}
 

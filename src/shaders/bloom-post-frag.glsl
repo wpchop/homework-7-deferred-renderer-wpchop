@@ -7,16 +7,9 @@ out vec4 out_Col;
 uniform sampler2D u_frame;
 uniform float u_Time;
 
-// // Interpolation between color and greyscale over time on left half of screen
-// void main() {
-// 	vec3 color = texture(u_frame, fs_UV).xyz;
-// 	// vec3 color2 = vec3(dot(color, vec3(0.2126, 0.7152, 0.0722)));
-// 	// float t = sin(3.14 * u_Time) * 0.5 + 0.5;
-// 	// t *= 1.0 - step(0.5, fs_UV.x);
-// 	// color = mix(color, color2, smoothstep(0.0, 1.0, t));
-// 	out_Col = vec4(color, 1.0);
-// }
-
+// references:
+// https://www.shadertoy.com/view/XdfGDH
+// https://learnopengl.com/Advanced-Lighting/Bloom
 
 float normpdf(in float x, in float sigma)
 {
@@ -26,6 +19,7 @@ float normpdf(in float x, in float sigma)
 void main() {
 
 	vec3 col = texture(u_frame, fs_UV).rgb;
+	// float z = texture(u_frame, fs_UV).a;
 
     float brightness = dot(col, vec3(0.2126, 0.7152, 0.0722));
 
@@ -70,6 +64,7 @@ void main() {
         out_Col = vec4(col, 1.0); 
     }
 
+	// out_Col = vec4(z,0.0,0.0,1.0);
 	// out_Col = vec4(col, 1.0);
 		// out_Col = vec4(final_colour/(Z*Z), 1.0);
 }

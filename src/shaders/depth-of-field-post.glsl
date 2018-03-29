@@ -12,18 +12,13 @@ float normpdf(in float x, in float sigma)
 	return 0.39894*exp(-0.5*x*x/(sigma*sigma))/sigma;
 }
 
-void main() {
-
-	vec3 col = texture(u_frame, fs_UV).rgb;
-
-    float z = texture(u_frame, fs_UV).a;
-
+vec3 gaussianBlur() {
 	float tex_offsetX = float(textureSize(u_frame, 0).x);
 	float tex_offsetY = float(textureSize(u_frame, 0).y);
 	vec2 offset = vec2(1.0 / tex_offsetX, 1.0 / tex_offsetY);
 
 		//declare stuff
-		const int mSize = 13;
+		const int mSize = 11;
 		const int kSize = (mSize-1)/2;
 		float kernel[mSize];
 		vec3 final_colour = vec3(0.0);
@@ -52,7 +47,20 @@ void main() {
 				final_colour += kernel[kSize+j]*kernel[kSize+i] * texture(u_frame, blurSample).rgb;
 			}
 		}
+    return final_colour;
+}
 
+void main() {
 
-    out_Col = vec4(z, 0.0,0.0, 1.0);
+	vec3 col = texture(u_frame, fs_UV).rgb;
+
+    float z = texture(u_frame, fs_UV).a;
+
+    vec3 final_colour;
+
+    float dist = clamp(abs(z + 23.0) / 2.0, 0.0, 1.0);
+    final_colour = 2.0 * gaussianBlur();
+    vec3 colsum = dist * final_colour + (1.0 - dist) * col;
+    out_Col = vec4(colsum, 1.0);
+
 }
