@@ -32,6 +32,8 @@ class OpenGLRenderer {
   post32Passes: PostProcess[];
 
   bloomShader: PostProcess;
+  DOFshader: PostProcess;
+  paintShader: PostProcess;
 
   currentTime: number; // timer number to apply to all drawing shaders
 
@@ -55,6 +57,10 @@ class OpenGLRenderer {
     this.post32Passes.push(pass);
   }
 
+  clear32BitPass() {
+    this.post32Passes = [];
+  }
+
 
   constructor(public canvas: HTMLCanvasElement) {
     this.currentTime = 0.0;
@@ -73,9 +79,13 @@ class OpenGLRenderer {
 
     // this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/examplePost3-frag.glsl'))));
     // this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/bloom-post-frag.glsl'))));
-    this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/depth-of-field-post.glsl'))));
+    // this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/depth-of-field-post.glsl'))));
+    // this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/oil-paint-post.glsl'))));
 
     this.bloomShader = new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/bloom-post-frag.glsl')));
+    this.DOFshader = new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/depth-of-field-post.glsl')));
+    this.paintShader = new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/oil-paint-post.glsl')));
+
 
     if (!gl.getExtension("OES_texture_float_linear")) {
       console.error("OES_texture_float_linear not available");

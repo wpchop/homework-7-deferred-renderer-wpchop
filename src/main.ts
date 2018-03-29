@@ -13,7 +13,10 @@ import Texture from './rendering/gl/Texture';
 // Define an object with application parameters and button callbacks
 const controls = {
   // Extra credit: Add interactivity
-  bloom: 0.8,
+  bloom: true,
+  paint: false,
+  DOF: false,
+
 };
 
 let square: Square;
@@ -69,7 +72,9 @@ function main() {
 
   // Add controls to the gui
   const gui = new DAT.GUI();
-  gui.add(controls, 'bloom', 0, 2);
+  gui.add(controls, 'bloom', true);
+  gui.add(controls, 'paint', false);
+  gui.add(controls, 'DOF', false);
 
 
   // get canvas and webgl context
@@ -112,9 +117,21 @@ function main() {
 
     let bloom = controls.bloom;
 
+    renderer.clear32BitPass();
+    
+    if (controls.bloom) {
+      renderer.add32BitPass(renderer.bloomShader);
+    } 
+    if (controls.paint) {
+      renderer.add32BitPass(renderer.paintShader);
+    }
+    if (controls.DOF) {
+      renderer.add32BitPass(renderer.DOFshader);
+    }
+
     // TODO: pass any arguments you may need for shader passes
     // forward render mesh info into gbuffers
-    renderer.renderToGBuffer(camera, standardDeferred, [mesh0], bloom);
+    renderer.renderToGBuffer(camera, standardDeferred, [mesh0], 1.0);
     // render from gbuffers into 32-bit color buffer
     renderer.renderFromGBuffer(camera);
     // apply 32-bit post and tonemap from 32-bit color to 8-bit color
