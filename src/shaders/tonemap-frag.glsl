@@ -21,17 +21,11 @@ void main() {
 // 	color = pow(color, vec3(1.0 / 2.2));
 // 	out_Col = vec4(color, 1.0);
 
-// Linear
-   	// vec3 texColor = texture(u_frame, fs_UV).xyz;
-	// texColor *= 16.0;  // Hardcoded Exposure Adjustment
-	// vec3 retColor = pow(texColor, vec3(1.0/2.2));
-	// out_Col = vec4(retColor,1);
-
 	// Reinhard
    	vec3 texColor = texture(u_frame, fs_UV).xyz;
-	   	texColor = min(vec3(1.0), texColor);
-   texColor *= 16.0;  // Hardcoded Exposure Adjustment
-   texColor = texColor/(1.0 + texColor);
-   vec3 retColor = pow(texColor,vec3(1.0/2.2));
-   out_Col = vec4(texColor,1.0);
+	// texColor = min(vec3(1.0),texColor);
+	texColor *= 2.0;  // Hardcoded Exposure Adjustment
+   	texColor = texColor/(1.0 + texColor);
+   	vec3 retColor = pow(texColor,vec3(1.0/2.2));
+   	out_Col = vec4(retColor,1.0);
 }

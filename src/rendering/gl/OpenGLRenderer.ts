@@ -31,6 +31,8 @@ class OpenGLRenderer {
   post8Passes: PostProcess[];
   post32Passes: PostProcess[];
 
+  bloomShader: PostProcess;
+
   currentTime: number; // timer number to apply to all drawing shaders
 
   // the shader that renders from the gbuffers into the postbuffers
@@ -70,6 +72,9 @@ class OpenGLRenderer {
     // this.add8BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/examplePost2-frag.glsl'))));
 
     // this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/examplePost3-frag.glsl'))));
+    this.add32BitPass(new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/bloom-post-frag.glsl'))));
+
+    this.bloomShader = new PostProcess(new Shader(gl.FRAGMENT_SHADER, require('../../shaders/bloom-post-frag.glsl')));
 
     if (!gl.getExtension("OES_texture_float_linear")) {
       console.error("OES_texture_float_linear not available");
@@ -93,7 +98,6 @@ class OpenGLRenderer {
   setClearColor(r: number, g: number, b: number, a: number) {
     gl.clearColor(r, g, b, a);
   }
-
 
   setSize(width: number, height: number) {
     console.log(width, height);
@@ -208,7 +212,7 @@ class OpenGLRenderer {
   }
 
 
-  renderToGBuffer(camera: Camera, gbProg: ShaderProgram, drawables: Array<Drawable>) {
+  renderToGBuffer(camera: Camera, gbProg: ShaderProgram, drawables: Array<Drawable>, bloom: number) {
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.gBuffer);
     gl.viewport(0, 0, gl.drawingBufferWidth, gl.drawingBufferHeight);
     gl.enable(gl.DEPTH_TEST);
@@ -229,6 +233,9 @@ class OpenGLRenderer {
     gbProg.setGeometryColor(color);
     gbProg.setViewMatrix(view);
     gbProg.setProjMatrix(proj);
+    gbProg.setAspect(aspect);
+    gbProg.setFovy(fovy);
+    gbProg.setBloom(bloom);
 
     gbProg.setTime(this.currentTime);
 
